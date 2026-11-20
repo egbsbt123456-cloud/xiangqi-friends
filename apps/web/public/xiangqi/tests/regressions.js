@@ -1,0 +1,13 @@
+'use strict';
+const assert=require('node:assert/strict');
+const Q=require('../js/engine.js'), AI=require('../js/ai.js');
+const board=Q.initialBoard(), before=JSON.stringify(board);
+const limited=AI.bestMove(board,'r',4,{nodeBudget:5,timeMs:100});
+assert.ok(limited && limited.move,'预算不足也须有合法兜底');
+assert.ok(limited.nodes<=5,'所有搜索分支必须服从同一节点预算');
+assert.ok(limited.cutoff,'预算耗尽必须标记未完整搜索');
+assert.equal(JSON.stringify(board),before,'中断搜索必须恢复每一次试走');
+assert.ok(Q.safeApplyMove(Q.createInitialState(),'r',limited.move).ok,'截断结果必须合法');
+assert.deepEqual(Q.movesFor(board,-1,0),[],'越界起点返回空走法');
+assert.equal(Q.safeApplyMove({board:null,turn:'r',over:false,version:0},'r',{fr:0,fc:0,tr:1,tc:0}).code,'BAD_STATE','损坏状态应明确拒绝而非抛错');
+console.log('预算、截断还原、合法兜底、输入守卫回归：通过');

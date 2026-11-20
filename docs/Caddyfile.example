@@ -1,0 +1,11 @@
+chess.example.com {
+  encode zstd gzip
+  handle /api/* {
+    reverse_proxy 127.0.0.1:3006
+  }
+  handle {
+    root * /srv/xiangqi-friends/apps/web/dist
+    try_files {path} /index.html
+    file_server
+  }
+}

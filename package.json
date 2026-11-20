@@ -1,0 +1,26 @@
+{
+  "name": "xiangqi-friends",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.34.9",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "dev": "concurrently -k -n api,web \"pnpm --filter @board/server dev\" \"pnpm --filter @board/web dev\"",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "db:migrate": "pnpm --filter @board/server db:migrate",
+    "start": "pnpm --filter @board/server start",
+    "test": "vitest run",
+    "test:classic": "node apps/web/public/xiangqi/tests/run-tests.js && node apps/web/public/xiangqi/tests/regressions.js"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.0",
+    "@types/node": "^24.0.0"
+  },
+  "version": "1.0.0",
+  "license": "MIT"
+}
